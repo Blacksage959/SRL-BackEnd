@@ -15,12 +15,13 @@ class Orders extends Migration
     {
       Schema::create('orders', function (Blueprint $table) {
           $table->increments('id');
-          $table->increments('userid');
-          $table->increments('productID');
+          $table->integer('userid');
+          $table->integer('productID');
           $table->integer('amount');
           $table->integer('total');
           $table->longText('comment');
           $table->timestamps();
+        });
     }
 
     /**

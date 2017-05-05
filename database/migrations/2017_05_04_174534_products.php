@@ -19,7 +19,7 @@ class Products extends Migration
           $table->longText('images');
           $table->integer('price');
           $table->longText('description');
-          $table->increments('categoryID');
+          $table->integer('categoryID');
           $table->boolean('availability');
           $table->timestamps();
       });
