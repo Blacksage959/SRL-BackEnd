@@ -3,63 +3,61 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Purifier;
+use Hash;
+use Response;
+use App\User;
+use JWTAuth;
+use File;
 
 class CategoriesController extends Controller
 {
-  public function index ()
+  public function index()
   {
-    $categories = Category::orderBy("id", "desc")->take(6)->get();
-    foreach($categories as $key => $category)
-    {
-      if(strlen($category->body)>100)
-      {
-        $category->body = substr($category->body,0,100)."...";
-
-      }
-    }
+    $categories = Category::all();
     return Response::json($categories);
 
   }
 
-  public function store (Request $request)
+  public function store(Request $request)
   {
     $rules = [
-      'id' => 'required',
       'name' => 'required',
 
   ];
 
     $validator = Validator::make(Purifier::clean($request->all()), $rules);
-    if($validator->fails())
-    {
-      return Response::json(["error" => "You need to fill out all fields."]);
-    }
+      if($validator->fails())
+        {
+          return Response::json(["error" => "You need to fill out all fields."]);
+        }
 
     $category = new Category;
-
-    $category->id = $request->input('id');
-    $category->name = $request->input('name');
-    $category->save();
-
+      $category->name = $request->input('name');
+      $category->save();
     return Response::json(["success" => "Congrats, You did it."]);
-
   }
 
 
-  public function update ($id, Request $request)
+  public function update($id, Request $request)
   {
+
+    $validator = Validator::make(Purifier::clean($request->all()), $rules);
+      if($validator->fails())
+        {
+          return Response::json(["error" => "You need to fill out all fields."]);
+        }
+
     $category = Category::find($id);
-
-    $category->id = $request->input('id');
-    $category->name = $request->input('name');
-    $category->save();
-
+      $category->name = $request->input('name');
+      $category->save();
     return Response::json(["success" => "Congrats, You did it."]);
 
   }
 
 
-  public function show ($id)
+  public function show($id)
   {
     $category = Category::find($id);
 
@@ -67,13 +65,11 @@ class CategoriesController extends Controller
   }
 
 
-  public function destroy ($id)
+  public function destroy($id)
   {
     $category = Category::find($id);
-
     $category->delete();
-
-    return Response::json(["success" => "Deleted category."]);
+  return Response::json(["success" => "Deleted category."]);
 
   }
 
