@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
 {
-  public function index () //list of articles     //CRUD functions
+  public function index ()
   {
     $categories = Category::orderBy("id", "desc")->take(6)->get();
     foreach($categories as $key => $category)
@@ -21,12 +21,12 @@ class CategoriesController extends Controller
 
   }
 
-  public function store (Request $request) //stores article
+  public function store (Request $request)
   {
     $rules = [
-      'title' => 'required',
-      'body' => 'required',
-      'image' => 'required',
+      'id' => 'required',
+      'name' => 'required',
+
   ];
 
     $validator = Validator::make(Purifier::clean($request->all()), $rules);
@@ -37,14 +37,8 @@ class CategoriesController extends Controller
 
     $category = new Category;
 
-    $category->title = $request->input('title');
-    $category->body = $request->input('body');
-
-    $image = $request->file('image');
-    $imageName = $image->getClientOriginalName();
-    $image->move('storage/', $imageName);
-    $category->image = $request->root().'/storage/'.$imageName;
-
+    $category->id = $request->input('id');
+    $category->name = $request->input('name');
     $category->save();
 
     return Response::json(["success" => "Congrats, You did it."]);
@@ -52,17 +46,12 @@ class CategoriesController extends Controller
   }
 
 
-  public function update ($id, Request $request) //update ourt article
+  public function update ($id, Request $request)
   {
     $category = Category::find($id);
 
-    $category->title = $request->input('title');
-    $category->body = $request->input('body');
-
-    $image = $request->file('image');
-    $imageName = $image->getClientOriginalName();
-    $image->move('storage/', $imageName);
-    $category->image = $request->root().'/storage/'.$imageName;
+    $category->id = $request->input('id');
+    $category->name = $request->input('name');
     $category->save();
 
     return Response::json(["success" => "Congrats, You did it."]);
@@ -70,7 +59,7 @@ class CategoriesController extends Controller
   }
 
 
-  public function show ($id) //show single article
+  public function show ($id)
   {
     $category = Category::find($id);
 
@@ -78,7 +67,7 @@ class CategoriesController extends Controller
   }
 
 
-  public function destroy ($id) //destroys article
+  public function destroy ($id)
   {
     $category = Category::find($id);
 
