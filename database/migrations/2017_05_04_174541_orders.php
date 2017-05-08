@@ -15,10 +15,10 @@ class Orders extends Migration
     {
       Schema::create('orders', function (Blueprint $table) {
           $table->increments('id');
-          $table->integer('userid');
+          $table->integer('userID');
           $table->integer('productID');
           $table->integer('amount');
-          $table->integer('total');
+          $table->integer('totalPrice');
           $table->longText('comment');
           $table->timestamps();
         });

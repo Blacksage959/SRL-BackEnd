@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Purifier;
 use Hash;
 use Response;
-use App\User;
+use App\Category;
 use JWTAuth;
 use File;
 

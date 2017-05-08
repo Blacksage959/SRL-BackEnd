@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Purifier;
 use Hash;
 use Response;
-use App\User;
+use App\Product;
 use JWTAuth;
 use File;
 
@@ -24,12 +24,13 @@ class ProductsController extends Controller
   public function store(Request $request)
   {
     $rules = [
-      "id " => 'required';
-      "image" => 'required';
-      "price" => 'required';
-      "description" => 'required';
-      "name" => 'required';
-      "categoryID" => 'required';
+
+      "images" => 'required',
+      "price" => 'required',
+      "description" => 'required',
+      "name" => 'required',
+      "categoryID" => 'required',
+      "availability" => 'required',
   ];
 
     $validator = Validator::make(Purifier::clean($request->all()), $rules);
@@ -40,11 +41,17 @@ class ProductsController extends Controller
 
     $product = new Product;
 
-      $product->image = $request->input('image');
+    $images = $request->file('images');
+    $imageName = $images->getClientOriginalName();
+    $images->move('storage/', $imageName);
+    $product->images = $request->root().'/storage/'.$imageName;
+
       $product->price = $request->input('price');
       $product->description = $request->input('description');
       $product->name = $request->input('name');
       $product->categoryID = $request->input('categoryID');
+      $product->availability = $request->input('availability');
+
       $product->save();
     return Response::json(["success" => "Congrats, You did it."]);
   }
@@ -61,11 +68,17 @@ class ProductsController extends Controller
 
     $product = Product::find($id);
 
-    $product->image = $request->input('image');
+    $images = $request->file('images');
+    $imageName = $images->getClientOriginalName();
+    $images->move('storage/', $imageName);
+    $product->images = $request->root().'/storage/'.$imageName;
+
     $product->price = $request->input('price');
     $product->description = $request->input('description');
     $product->name = $request->input('name');
     $product->categoryID = $request->input('categoryID');
+    $product->availability = $request->input('availability');
+
     $product->save();
 
     return Response::json(["success" => "Congrats, You did it."]);

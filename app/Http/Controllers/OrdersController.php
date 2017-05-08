@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Purifier;
 use Hash;
 use Response;
-use App\User;
+use App\Order;
 use JWTAuth;
 use File;
 
@@ -23,7 +23,7 @@ class OrdersController extends Controller
   public function store(Request $request)
   {
     $rules = [
-      'id' => 'required',
+
       'userID' => 'required',
       'productID' => 'required',
       'amount' => 'required',
@@ -43,7 +43,8 @@ class OrdersController extends Controller
       $order->productID = $request->input('productID');
       $order->amount = $request->input('amount');
       $order->totalPrice = $request->input('totalPrice');
-      $order->userID = Auth::user()->id;
+      $order->comment = $request->input('comment');
+
     $order->save();
 
     return Response::json(["success" => "Congrats, You did it."]);
@@ -65,7 +66,8 @@ class OrdersController extends Controller
       $order->productID = $request->input('productID');
       $order->amount = $request->input('amount');
       $order->totalPrice = $request->input('totalPrice');
-      $order->userID = Auth::user()->id;
+      $order->comment = $request->input('comment');
+
     $article->save();
 
     return Response::json(["success" => "Congrats, You did it."]);
