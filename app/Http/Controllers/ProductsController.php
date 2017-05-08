@@ -60,6 +60,17 @@ class ProductsController extends Controller
   public function update($id, Request $request)
   {
 
+    $rules = [
+
+      "images" => 'required',
+      "price" => 'required',
+      "description" => 'required',
+      "name" => 'required',
+      "categoryID" => 'required',
+      "availability" => 'required',
+  ];
+
+
     $validator = Validator::make(Purifier::clean($request->all()), $rules);
       if($validator->fails())
         {
@@ -73,13 +84,13 @@ class ProductsController extends Controller
     $images->move('storage/', $imageName);
     $product->images = $request->root().'/storage/'.$imageName;
 
-    $product->price = $request->input('price');
-    $product->description = $request->input('description');
-    $product->name = $request->input('name');
-    $product->categoryID = $request->input('categoryID');
-    $product->availability = $request->input('availability');
+      $product->price = $request->input('price');
+      $product->description = $request->input('description');
+      $product->name = $request->input('name');
+      $product->categoryID = $request->input('categoryID');
+      $product->availability = $request->input('availability');
 
-    $product->save();
+      $product->save();
 
     return Response::json(["success" => "Congrats, You did it."]);
 

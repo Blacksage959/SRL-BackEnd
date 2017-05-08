@@ -43,6 +43,11 @@ class CategoriesController extends Controller
   public function update($id, Request $request)
   {
 
+    $rules = [
+      'name' => 'required',
+
+  ];
+
     $validator = Validator::make(Purifier::clean($request->all()), $rules);
       if($validator->fails())
         {

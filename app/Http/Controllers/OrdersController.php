@@ -10,6 +10,7 @@ use Response;
 use App\Order;
 use JWTAuth;
 use File;
+use Auth;
 
 class OrdersController extends Controller
 {
@@ -39,7 +40,7 @@ class OrdersController extends Controller
         }
 
     $order = new Order;
-      $order->userID = $request->input('userID');
+      $order->userID = Auth::user()->id;
       $order->productID = $request->input('productID');
       $order->amount = $request->input('amount');
       $order->totalPrice = $request->input('totalPrice');
@@ -54,6 +55,16 @@ class OrdersController extends Controller
 
   public function update($id, Request $request)
   {
+
+    $rules = [
+
+      'userID' => 'required',
+      'productID' => 'required',
+      'amount' => 'required',
+      'totalPrice' => 'required',
+      'comment' => 'required',
+    ];
+
     $validator = Validator::make(Purifier::clean($request->all()), $rules);
       if($validator->fails())
         {
@@ -62,7 +73,7 @@ class OrdersController extends Controller
 
 
     $order = Order::find($id);
-      $order->userID = $request->input('userID');
+      $order->userID = Auth::user()->id;
       $order->productID = $request->input('productID');
       $order->amount = $request->input('amount');
       $order->totalPrice = $request->input('totalPrice');

@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use User;
+
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Purifier;
@@ -26,6 +27,7 @@ class UsersController extends Controller
         "email"=>"required",
         "username"=>"required",
         "password"=>"required",
+        "roleID"=>"required",
     ];
 
       $validator=Validator::make(Purifier::clean($request->all()),$rules);
@@ -45,6 +47,7 @@ class UsersController extends Controller
       $user->name = $request->input("username");
       $user->password = Hash::make($request->input("password"));
       $user->email = $request->input("email");
+      $user->roleID = 2;
       $user->save();
     return Response::json(["success"=>"Thankyou for signing up."]);
   }
