@@ -20,6 +20,7 @@ Route::post('deleteOrder/{id}','OrdersController@destroy');
 
 Route::post('signup','UsersController@signup');
 Route::post('signin','UsersController@signin');
+Route::get('getUsers','UsersController@index');
 
 Route::post('storeProduct', 'ProductsController@store');
 Route::get('getProducts','ProductsController@index');

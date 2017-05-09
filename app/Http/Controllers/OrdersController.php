@@ -11,9 +11,15 @@ use App\Order;
 use JWTAuth;
 use File;
 use Auth;
+use App\Product
 
 class OrdersController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware('jwt.auth', ['only' => ['store','update','destroy']]);
+  }
+
 
   public function index()
   {
@@ -39,11 +45,22 @@ class OrdersController extends Controller
             return Response::json(["error" => "You need to fill out all fields."]);
         }
 
+      $product = Product::find($request->input('productID'));
+        if(empty($product))
+          {
+            return Response::json(["" => ""]);
+          }
+          if($product->availability == 0)
+            {
+              return Response::json(["" => ""]);
+            }
+
     $order = new Order;
       $order->userID = Auth::user()->id;
       $order->productID = $request->input('productID');
       $order->amount = $request->input('amount');
-      $order->totalPrice = $request->input('totalPrice');
+
+      $order->totalPrice = $request->input('amount') * $product->price;
       $order->comment = $request->input('comment');
 
     $order->save();
@@ -79,9 +96,10 @@ class OrdersController extends Controller
       $order->totalPrice = $request->input('totalPrice');
       $order->comment = $request->input('comment');
 
-    $article->save();
+    $order->save();
 
     return Response::json(["success" => "Congrats, You did it."]);
+
   }
 
 
