@@ -23,15 +23,13 @@ class OrdersController extends Controller
 
   public function index()
   {
-    $orderss = Order::all();
+    $orders = Order::all();
     return Response::json($orders);
   }
 
   public function store(Request $request)
   {
     $rules = [
-
-      'userID' => 'required',
       'productID' => 'required',
       'amount' => 'required',
       'totalPrice' => 'required',
@@ -46,14 +44,16 @@ class OrdersController extends Controller
         }
 
       $product = Product::find($request->input('productID'));
-        if(empty($product))
-          {
-            return Response::json(["" => ""]);
-          }
-          if($product->availability == 0)
-            {
-              return Response::json(["" => ""]);
-            }
+
+      if(empty($product))
+      {
+        return Response::json(["error" => "Product does not exist."]);
+      }
+
+      if($product->availability == 0)
+      {
+        return Response::json(["error" => "Product not available."]);
+      }
 
     $order = new Order;
       $order->userID = Auth::user()->id;
@@ -74,8 +74,6 @@ class OrdersController extends Controller
   {
 
     $rules = [
-
-      'userID' => 'required',
       'productID' => 'required',
       'amount' => 'required',
       'totalPrice' => 'required',
@@ -88,12 +86,25 @@ class OrdersController extends Controller
             return Response::json(["error" => "You need to fill out all fields."]);
         }
 
+        $product = Product::find($request->input('productID'));
+
+        if(empty($product))
+        {
+          return Response::json(["error" => "Product does not exist."]);
+        }
+
+        if($product->availability == 0)
+        {
+          return Response::json(["error" => "Product not available."]);
+        }
+
+
 
     $order = Order::find($id);
       $order->userID = Auth::user()->id;
       $order->productID = $request->input('productID');
       $order->amount = $request->input('amount');
-      $order->totalPrice = $request->input('totalPrice');
+      $order->totalPrice = $request->input('amount') * $product->price;
       $order->comment = $request->input('comment');
 
     $order->save();
