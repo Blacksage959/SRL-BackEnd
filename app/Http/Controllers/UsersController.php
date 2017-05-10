@@ -119,13 +119,6 @@ class UsersController extends Controller
 
   public function show($id)
   {
-
-    $user = User::find($request->input('userID'));
-        if(empty($user))
-          {
-            return Response::json(["error" => "User does not exist."]);
-          }
-
     $user = User::find($id);
     return Response::json($user);
   }
@@ -136,13 +129,6 @@ class UsersController extends Controller
 
   public function destroy($id)
   {
-
-    $user = User::find($request->input('userID'));
-        if(empty($user))
-          {
-            return Response::json(["error" => "User does not exist."]);
-          }
-
     $user = User::find($id);
     $user->delete();
 
