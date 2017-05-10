@@ -10,7 +10,7 @@ use App\Order;
 use JWTAuth;
 use File;
 use Auth;
-use App\Role
+use App\Role;
 
 class RolesController extends Controller
 {
@@ -23,7 +23,7 @@ class RolesController extends Controller
   public function store(Request $request)
   {
     $rules = [
-      "roleID" => 'required',
+      
       "name" => 'required',
   ];
 
@@ -34,7 +34,7 @@ class RolesController extends Controller
         }
 
     $role = new Role;
-      $role->roleID = $request->input('roleID');
+      
       $role->name = $request->input('name');
     $role->save();
 
@@ -45,7 +45,7 @@ class RolesController extends Controller
   public function update($id, Request $request)
   {
     $rules = [
-      "roleID" => 'required',
+      
       "name" => 'required',
   ];
 
@@ -56,7 +56,7 @@ class RolesController extends Controller
         }
 
     $role = Role::find($id);
-      $role->roleID = $request->input('roleID');
+      
       $role->name = $request->input('name');
     $role->save();
 

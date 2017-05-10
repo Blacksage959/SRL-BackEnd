@@ -21,9 +21,9 @@ Route::post('deleteOrder/{id}','OrdersController@destroy');
 Route::post('signup','UsersController@signup');
 Route::post('signin','UsersController@signin');
 Route::get('getUsers','UsersController@index');
-Route::get('showUser','UsersController@show');
-Route::post('updateUser','UsersController@update');
-Route::post('deleteUser','UsersController@destroy');
+Route::get('showUser/{id}','UsersController@show');
+Route::post('updateUser/{id}','UsersController@update');
+Route::post('deleteUser/{id}','UsersController@destroy');
 
 Route::post('storeRole', 'RolesController@store');
 Route::get('getRoles','RolesController@index');

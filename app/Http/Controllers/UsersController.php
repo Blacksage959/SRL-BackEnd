@@ -99,15 +99,13 @@ class UsersController extends Controller
   $user = User::find($request->input('userID'));
       if(empty($user))
         {
-          return Response::json(["error" => "user does not exist."]);
+          return Response::json(["error" => "User does not exist."]);
         }
 
   $user = User::find($id);
       $user->name = $request->input("username");
       $user->password = Hash::make($request->input("password"));
       $user->email = $request->input("email");
-
-      $user->roleID = $request->input("roleID");
       $user->roleID = 2;
     $user->save();
 
@@ -121,6 +119,13 @@ class UsersController extends Controller
 
   public function show($id)
   {
+
+    $user = User::find($request->input('userID'));
+        if(empty($user))
+          {
+            return Response::json(["error" => "User does not exist."]);
+          }
+
     $user = User::find($id);
     return Response::json($user);
   }
@@ -131,6 +136,13 @@ class UsersController extends Controller
 
   public function destroy($id)
   {
+
+    $user = User::find($request->input('userID'));
+        if(empty($user))
+          {
+            return Response::json(["error" => "User does not exist."]);
+          }
+
     $user = User::find($id);
     $user->delete();
 
