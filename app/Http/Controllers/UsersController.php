@@ -52,6 +52,8 @@ class UsersController extends Controller
     return Response::json(["success"=>"Thankyou for signing up."]);
   }
 
+
+
   public function signIn(Request $request)
     {
       $rules=[
@@ -73,8 +75,65 @@ class UsersController extends Controller
 
     $token = JWTAuth::attempt($cred);
     return Response::json(compact("token"));
+}
 
+
+
+
+  public function update($id, Request $request)
+  {
+
+    $rules=[
+      "email"=>"required",
+      "username"=>"required",
+      "password"=>"required",
+      "roleID"=>"required",
+  ];
+
+    $validator = Validator::make(Purifier::clean($request->all()), $rules);
+      if($validator->fails())
+        {
+            return Response::json(["error" => "You need to fill out all fields."]);
+        }
+
+  $user = User::find($request->input('userID'));
+      if(empty($user))
+        {
+          return Response::json(["error" => "user does not exist."]);
+        }
+
+  $user = User::find($id);
+      $user->name = $request->input("username");
+      $user->password = Hash::make($request->input("password"));
+      $user->email = $request->input("email");
+
+      $user->roleID = $request->input("roleID");
+      $user->roleID = 2;
+    $user->save();
+
+    return Response::json(["success" => "Congrats, You did it."]);
 
   }
 
+
+
+
+
+  public function show($id)
+  {
+    $user = User::find($id);
+    return Response::json($user);
+  }
+
+
+
+
+
+  public function destroy($id)
+  {
+    $user = User::find($id);
+    $user->delete();
+
+    return Response::json(["success" => "Deleted User."]);
+  }
 }
