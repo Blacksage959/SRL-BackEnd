@@ -23,6 +23,13 @@ class OrdersController extends Controller
 
   public function index()
   {
+
+    $user = Auth::user();
+    if($user->roleID != 1)
+      {
+        return Response::json(["error" => "Not allowed."])
+      }
+
     $orders = Order::all();
     return Response::json($orders);
   }
@@ -102,6 +109,10 @@ class OrdersController extends Controller
 
     $order = Order::find($id);
       $order->userID = Auth::user()->id;
+      if($user->roleID != 1 || $user->id != $order->userID)
+        {
+          return Response::json(["error" => "Not allowed."])
+        }
       $order->productID = $request->input('productID');
       $order->amount = $request->input('amount');
       $order->totalPrice = $request->input('amount') * $product->price;
@@ -123,7 +134,13 @@ class OrdersController extends Controller
 
   public function destroy($id)
   {
+
     $order = Order::find($id);
+    $user = Auth::user();
+    if($user->roleID != 1 || $user->id != $order->userID)
+      {
+        return Response::json(["error" => "Not allowed."])
+      }
     $order->delete();
 
     return Response::json(["success" => "Deleted order."]);

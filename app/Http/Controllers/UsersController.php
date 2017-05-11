@@ -17,6 +17,13 @@ class UsersController extends Controller
 
   public function index()
   {
+
+    $user = Auth::user();
+    if($user->roleID != 1)
+      {
+        return Response::json(["error" => "Not allowed."])
+      }
+
     $users = User::all();
     return Response::json($users);
   }
@@ -102,6 +109,12 @@ class UsersController extends Controller
           return Response::json(["error" => "User does not exist."]);
         }
 
+        $user = Auth::user();
+        if($user->roleID != 1)
+          {
+            return Response::json(["error" => "Not allowed."])
+          }
+
   $user = User::find($id);
       $user->name = $request->input("username");
       $user->password = Hash::make($request->input("password"));
@@ -119,6 +132,13 @@ class UsersController extends Controller
 
   public function show($id)
   {
+
+    $user = Auth::user();
+    if($user->roleID != 1)
+      {
+        return Response::json(["error" => "Not allowed."])
+      }
+
     $user = User::find($id);
     return Response::json($user);
   }
@@ -129,6 +149,13 @@ class UsersController extends Controller
 
   public function destroy($id)
   {
+
+    $user = Auth::user();
+    if($user->roleID != 1)
+      {
+        return Response::json(["error" => "Not allowed."])
+      }
+
     $user = User::find($id);
     $user->delete();
 

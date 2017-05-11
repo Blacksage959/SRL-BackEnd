@@ -16,6 +16,12 @@ class RolesController extends Controller
 {
   public function index()
   {
+    $user = Auth::user();
+    if($user->roleID != 1)
+      {
+        return Response::json(["error" => "Not allowed."])
+      }
+
     $roles = Role::all();
     return Response::json($roles);
   }
@@ -23,7 +29,6 @@ class RolesController extends Controller
   public function store(Request $request)
   {
     $rules = [
-      
       "name" => 'required',
   ];
 
@@ -34,7 +39,6 @@ class RolesController extends Controller
         }
 
     $role = new Role;
-      
       $role->name = $request->input('name');
     $role->save();
 
@@ -45,7 +49,6 @@ class RolesController extends Controller
   public function update($id, Request $request)
   {
     $rules = [
-      
       "name" => 'required',
   ];
 
@@ -55,8 +58,13 @@ class RolesController extends Controller
           return Response::json(["error" => "You need to fill out all fields."]);
         }
 
+        $user = Auth::user();
+        if($user->roleID != 1)
+          {
+            return Response::json(["error" => "Not allowed."])
+          }
+
     $role = Role::find($id);
-      
       $role->name = $request->input('name');
     $role->save();
 
@@ -67,6 +75,13 @@ class RolesController extends Controller
 
   public function show($id)
   {
+
+    $user = Auth::user();
+    if($user->roleID != 1)
+      {
+        return Response::json(["error" => "Not allowed."])
+      }
+
     $role = Role::find($id);
       return Response::json($role);
   }
@@ -74,6 +89,13 @@ class RolesController extends Controller
 
   public function destroy($id)
   {
+
+    $user = Auth::user();
+    if($user->roleID != 1)
+      {
+        return Response::json(["error" => "Not allowed."])
+      }
+
     $role = Role::find($id);
     $role->delete();
       return Response::json(["success" => "Deleted Role."]);
