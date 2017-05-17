@@ -11,9 +11,10 @@ use App\Order;
 use JWTAuth;
 use File;
 use Auth;
-use App\Product
+use App\Product;
 
 class OrdersController extends Controller
+
 {
   public function __construct()
   {
@@ -27,7 +28,7 @@ class OrdersController extends Controller
     $user = Auth::user();
     if($user->roleID != 1)
       {
-        return Response::json(["error" => "Not allowed."])
+        return Response::json(["error" => "Not allowed."]);
       }
 
     $orders = Order::all();
@@ -109,10 +110,10 @@ class OrdersController extends Controller
 
     $order = Order::find($id);
       $order->userID = Auth::user()->id;
-      if($user->roleID != 1 || $user->id != $order->userID)
-        {
-          return Response::json(["error" => "Not allowed."])
-        }
+        if($user->roleID != 1 || $user->id != $order->userID)
+          {
+            return Response::json(["error" => "Not allowed."]);
+          }
       $order->productID = $request->input('productID');
       $order->amount = $request->input('amount');
       $order->totalPrice = $request->input('amount') * $product->price;
@@ -139,7 +140,7 @@ class OrdersController extends Controller
     $user = Auth::user();
     if($user->roleID != 1 || $user->id != $order->userID)
       {
-        return Response::json(["error" => "Not allowed."])
+        return Response::json(["error" => "Not allowed."]);
       }
     $order->delete();
 

@@ -18,8 +18,8 @@ Route::post('updateOrder/{id}','OrdersController@update');
 Route::get('showOrder/{id}','OrdersController@show');
 Route::post('deleteOrder/{id}','OrdersController@destroy');
 
-Route::post('signup','UsersController@signup');
-Route::post('signin','UsersController@signin');
+Route::post('signUp','UsersController@signup');
+Route::post('signIn','UsersController@signin');
 Route::get('getUsers','UsersController@index');
 Route::get('showUser/{id}','UsersController@show');
 Route::post('updateUser/{id}','UsersController@update');

@@ -10,10 +10,15 @@ use Response;
 use App\Product;
 use JWTAuth;
 use File;
+use Auth;
 
 class ProductsController extends Controller
 
 {
+  public function __construct()
+  {
+    $this->middleware("jwt.auth" , ["only" => ["index"]]);
+  }
 
   public function index()
   {

@@ -9,11 +9,16 @@ use Purifier;
 use Hash;
 use Response;
 use App\User;
+use Auth;
 use JWTAuth;
 use File;
 
 class UsersController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware("jwt.auth" , ["only" => ["index"]]);
+  }
 
   public function index()
   {
@@ -21,7 +26,7 @@ class UsersController extends Controller
     $user = Auth::user();
     if($user->roleID != 1)
       {
-        return Response::json(["error" => "Not allowed."])
+        return Response::json(["error" => "Not allowed."]);
       }
 
     $users = User::all();
@@ -34,7 +39,7 @@ class UsersController extends Controller
         "email"=>"required",
         "username"=>"required",
         "password"=>"required",
-        "roleID"=>"required",
+
     ];
 
       $validator=Validator::make(Purifier::clean($request->all()),$rules);
@@ -112,7 +117,7 @@ class UsersController extends Controller
         $user = Auth::user();
         if($user->roleID != 1)
           {
-            return Response::json(["error" => "Not allowed."])
+            return Response::json(["error" => "Not allowed."]);
           }
 
   $user = User::find($id);
@@ -136,7 +141,7 @@ class UsersController extends Controller
     $user = Auth::user();
     if($user->roleID != 1)
       {
-        return Response::json(["error" => "Not allowed."])
+        return Response::json(["error" => "Not allowed."]);
       }
 
     $user = User::find($id);
@@ -153,7 +158,7 @@ class UsersController extends Controller
     $user = Auth::user();
     if($user->roleID != 1)
       {
-        return Response::json(["error" => "Not allowed."])
+        return Response::json(["error" => "Not allowed."]);
       }
 
     $user = User::find($id);

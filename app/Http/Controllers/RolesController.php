@@ -14,12 +14,17 @@ use App\Role;
 
 class RolesController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware("jwt.auth" , ["only" => ["index"]]);
+  }
+
   public function index()
   {
     $user = Auth::user();
     if($user->roleID != 1)
       {
-        return Response::json(["error" => "Not allowed."])
+        return Response::json(["error" => "Not allowed."]);
       }
 
     $roles = Role::all();
@@ -61,7 +66,7 @@ class RolesController extends Controller
         $user = Auth::user();
         if($user->roleID != 1)
           {
-            return Response::json(["error" => "Not allowed."])
+            return Response::json(["error" => "Not allowed."]);
           }
 
     $role = Role::find($id);
@@ -79,7 +84,7 @@ class RolesController extends Controller
     $user = Auth::user();
     if($user->roleID != 1)
       {
-        return Response::json(["error" => "Not allowed."])
+        return Response::json(["error" => "Not allowed."]);
       }
 
     $role = Role::find($id);
@@ -93,7 +98,7 @@ class RolesController extends Controller
     $user = Auth::user();
     if($user->roleID != 1)
       {
-        return Response::json(["error" => "Not allowed."])
+        return Response::json(["error" => "Not allowed."]);
       }
 
     $role = Role::find($id);

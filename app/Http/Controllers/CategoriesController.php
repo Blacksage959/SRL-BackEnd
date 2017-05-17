@@ -10,9 +10,14 @@ use Response;
 use App\Category;
 use JWTAuth;
 use File;
+use Auth;
 
 class CategoriesController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware("jwt.auth" , ["only" => ["index"]]);
+  }
   public function index()
   {
     $categories = Category::all();
