@@ -17,7 +17,7 @@ class UsersController extends Controller
 {
   public function __construct()
   {
-    $this->middleware("jwt.auth" , ["only" => ["index"]]);
+    $this->middleware("jwt.auth" , ["only" => ["index","show","update","store","destroy"]]);
   }
 
   public function index()
@@ -135,16 +135,13 @@ class UsersController extends Controller
 
 
 
-  public function show($id)
+  public function show()
   {
 
     $user = Auth::user();
-    if($user->roleID != 1)
-      {
-        return Response::json(["error" => "Not allowed."]);
-      }
 
-    $user = User::find($id);
+
+    $user = User::find($user->id);
     return Response::json($user);
   }
 

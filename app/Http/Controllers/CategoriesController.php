@@ -16,10 +16,16 @@ class CategoriesController extends Controller
 {
   public function __construct()
   {
-    $this->middleware("jwt.auth" , ["only" => ["index"]]);
+    $this->middleware("jwt.auth" , ["only" => ["index","show","update","store","destroy"]]);
   }
   public function index()
   {
+    $user = Auth::user();
+    if($user->roleID != 1)
+      {
+        return Response::json(["error" => "Not allowed."]);
+      }
+
     $categories = Category::all();
     return Response::json($categories);
 
@@ -27,6 +33,11 @@ class CategoriesController extends Controller
 
   public function store(Request $request)
   {
+    $user = Auth::user();
+    if($user->roleID != 1)
+      {
+        return Response::json(["error" => "Not allowed."]);
+      }
     $rules = [
       'name' => 'required',
 
@@ -37,6 +48,11 @@ class CategoriesController extends Controller
         {
           return Response::json(["error" => "You need to fill out all fields."]);
         }
+        $user = Auth::user();
+        if($user->roleID != 1)
+          {
+            return Response::json(["error" => "Not allowed."]);
+          }
 
     $category = new Category;
       $category->name = $request->input('name');
@@ -59,6 +75,12 @@ class CategoriesController extends Controller
           return Response::json(["error" => "You need to fill out all fields."]);
         }
 
+        $user = Auth::user();
+        if($user->roleID != 1)
+          {
+            return Response::json(["error" => "Not allowed."]);
+          }
+
     $category = Category::find($id);
       $category->name = $request->input('name');
       $category->save();
@@ -69,6 +91,13 @@ class CategoriesController extends Controller
 
   public function show($id)
   {
+    $user = Auth::user();
+    if($user->roleID != 1)
+      {
+        return Response::json(["error" => "Not allowed."]);
+      }
+
+
     $category = Category::find($id);
 
     return Response::json($category);
@@ -77,6 +106,14 @@ class CategoriesController extends Controller
 
   public function destroy($id)
   {
+
+    $user = Auth::user();
+    if($user->roleID != 1)
+      {
+        return Response::json(["error" => "Not allowed."]);
+      }
+
+
     $category = Category::find($id);
     $category->delete();
   return Response::json(["success" => "Deleted category."]);

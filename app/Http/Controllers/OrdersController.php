@@ -18,7 +18,7 @@ class OrdersController extends Controller
 {
   public function __construct()
   {
-    $this->middleware('jwt.auth', ['only' => ['store','update','destroy']]);
+    $this->middleware("jwt.auth" , ["only" => ["index","show"]]);
   }
 
 
@@ -128,6 +128,12 @@ class OrdersController extends Controller
 
   public function show($id)
   {
+    $user = Auth::user();
+    if($user->roleID != 1 || $user->id != $order->userID)
+      {
+        return Response::json(["error" => "Not allowed."]);
+      }
+
     $order = Order::find($id);
     return Response::json($order);
   }

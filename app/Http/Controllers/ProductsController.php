@@ -17,7 +17,7 @@ class ProductsController extends Controller
 {
   public function __construct()
   {
-    $this->middleware("jwt.auth" , ["only" => ["index"]]);
+    $this->middleware("jwt.auth" , ["only" => ["update","store","destroy"]]);
   }
 
   public function index()
@@ -43,6 +43,12 @@ class ProductsController extends Controller
         {
           return Response::json(["error" => "You need to fill out all fields."]);
         }
+
+        $user = Auth::user();
+        if($user->roleID != 1)
+          {
+            return Response::json(["error" => "Not allowed."]);
+          }
 
     $product = new Product;
 
@@ -82,6 +88,13 @@ class ProductsController extends Controller
           return Response::json(["error" => "You need to fill out all fields."]);
         }
 
+        $user = Auth::user();
+        if($user->roleID != 1)
+          {
+            return Response::json(["error" => "Not allowed."]);
+          }
+
+
     $product = Product::find($id);
 
     $images = $request->file('images');
@@ -112,6 +125,14 @@ class ProductsController extends Controller
 
   public function destroy($id)
   {
+
+    $user = Auth::user();
+    if($user->roleID != 1)
+      {
+        return Response::json(["error" => "Not allowed."]);
+      }
+
+
     $product = Product::find($id);
 
     $product->delete();

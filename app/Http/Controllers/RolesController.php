@@ -16,7 +16,7 @@ class RolesController extends Controller
 {
   public function __construct()
   {
-    $this->middleware("jwt.auth" , ["only" => ["index"]]);
+    $this->middleware("jwt.auth" , ["only" => ["index","show","update","store","destroy"]]);
   }
 
   public function index()
@@ -38,13 +38,17 @@ class RolesController extends Controller
   ];
 
     $validator = Validator::make(Purifier::clean($request->all()), $rules);
-      if($validator->fails())
+    if($validator->fails())
+      {
+        return Response::json(["error" => "You need to fill out all fields."]);
+      }
+      $user = Auth::user();
+      if($user->roleID != 1)
         {
-          return Response::json(["error" => "You need to fill out all fields."]);
+          return Response::json(["error" => "Not allowed."]);
         }
-
     $role = new Role;
-      $role->name = $request->input('name');
+    $role->name = $request->input('name');
     $role->save();
 
     return Response::json(["success" => "Congrats, You did it."]);
@@ -53,6 +57,11 @@ class RolesController extends Controller
 
   public function update($id, Request $request)
   {
+    $user = Auth::user();
+    if($user->roleID != 1)
+      {
+        return Response::json(["error" => "Not allowed."]);
+      }
     $rules = [
       "name" => 'required',
   ];
