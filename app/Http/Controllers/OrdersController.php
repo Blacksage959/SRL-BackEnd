@@ -129,7 +129,7 @@ class OrdersController extends Controller
   public function show($id)
   {
     $user = Auth::user();
-    if($user->roleID != 1 || $user->id != $order->userID)
+    if($user->roleID != 1)
       {
         return Response::json(["error" => "Not allowed."]);
       }

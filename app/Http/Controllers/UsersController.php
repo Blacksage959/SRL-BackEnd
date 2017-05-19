@@ -139,6 +139,10 @@ class UsersController extends Controller
   {
 
     $user = Auth::user();
+    if($user->roleID != 1)
+      {
+        return Response::json(["error" => "Not allowed."]);
+      }
 
 
     $user = User::find($user->id);
