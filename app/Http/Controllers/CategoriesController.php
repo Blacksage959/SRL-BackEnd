@@ -11,21 +11,16 @@ use App\Category;
 use JWTAuth;
 use File;
 use Auth;
+use App\Product;
 
 class CategoriesController extends Controller
 {
   public function __construct()
   {
-    $this->middleware("jwt.auth" , ["only" => ["index","show","update","store","destroy"]]);
+    $this->middleware("jwt.auth" , ["only" => ["update","store","destroy"]]);
   }
   public function index()
   {
-    $user = Auth::user();
-    if($user->roleID != 1)
-      {
-        return Response::json(["error" => "Not allowed."]);
-      }
-
     $categories = Category::all();
     return Response::json($categories);
 
@@ -91,16 +86,10 @@ class CategoriesController extends Controller
 
   public function show($id)
   {
-    $user = Auth::user();
-    if($user->roleID != 1)
-      {
-        return Response::json(["error" => "Not allowed."]);
-      }
-
 
     $category = Category::find($id);
-
-    return Response::json($category);
+    $products = Product::where("categoryID", "=" , $id)->get();
+    return Response::json(["category"=> $category,"products"=>$products]);
   }
 
 
