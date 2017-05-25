@@ -31,7 +31,12 @@ class OrdersController extends Controller
         return Response::json(["error" => "Not allowed."]);
       }
 
-    $orders = Order::all();
+    $orders = Order::join("users","orders.userID","=","users.ID")
+                     ->join("products","orders.productID","=","products.id")
+                     ->select("orders.id","orders.amount","orders.totalPrice","users.name","products.name")
+                     ->orderBy("orders.id","desc")
+                    -> get();
+
     return Response::json($orders);
   }
 
